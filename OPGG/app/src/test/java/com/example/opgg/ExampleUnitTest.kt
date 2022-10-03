@@ -1,4 +1,4 @@
-package com.example.stopwatch
+package com.example.opgg
 
 import org.junit.Test
 

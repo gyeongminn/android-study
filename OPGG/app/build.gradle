@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace 'com.example.stopwatch'
-    compileSdk 32
+    namespace 'com.example.opgg'
+    compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.stopwatch"
-        minSdk 21
-        targetSdk 32
+        applicationId "com.example.opgg"
+        minSdk 33
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
