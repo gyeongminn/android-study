@@ -2,4 +2,5 @@
     <string name="app_name">StopWatch</string>
     <string name="record">구간 기록</string>
     <string name="start">시작</string>
+    <string name="zero_time">00:00.00</string>
 </resources>
