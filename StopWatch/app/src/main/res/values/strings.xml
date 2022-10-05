@@ -3,4 +3,23 @@
     <string name="record">구간 기록</string>
     <string name="start">시작</string>
     <string name="zero_time">00:00.00</string>
+    <string name="totalTime">전체 시간</string>
+    <string name="section">구간</string>
+    <string name="bar">bar</string>
+    <string name="settings" />
+    <string name="setting1">백그라운드에서 계속 진행</string>
+    <!-- Preference Titles -->
+    <string name="messages_header">Messages</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Your signature</string>
+    <string name="reply_title">Default reply action</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>
