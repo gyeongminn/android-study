@@ -1,8 +1,8 @@
 package com.example.stopwatch
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.widget.Button
@@ -12,7 +12,7 @@ import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.FragmentContainerView
+import androidx.preference.PreferenceManager
 import java.text.DecimalFormat
 import java.util.*
 
@@ -24,10 +24,11 @@ class MainActivity : AppCompatActivity() {
     private var timerTask: Timer? = null
 
     private var isRunning: Boolean = false // 현재 상태
-    private var isRecorded: Boolean = false // 기록이 남아있는지
 
-    private var time = 0 // 현재 시간
-    private var sectionTime = 0 // 현재 시간
+    private var startTime = 0
+    private var pauseTime = 0
+    private var time = 0
+    private var sectionTime = 0
 
     private var recordIndex: Int = 0
     private lateinit var timerText: TextView
@@ -63,7 +64,6 @@ class MainActivity : AppCompatActivity() {
         startAndStopBtn.setOnClickListener {
             if (!isRunning) { // 시작
                 isRunning = true
-                isRecorded = true
                 start()
             } else {  // 중지
                 isRunning = false
@@ -90,15 +90,7 @@ class MainActivity : AppCompatActivity() {
                 when(it.itemId) {
                     R.id.settings -> {
                         Log.d(mainTag, "open SettingActivity")
-
-                        // 설정창 열기
-                        val manager = supportFragmentManager
-                        val transaction = manager.beginTransaction()
-                        val fragment = SettingsFragment()
-                        transaction.replace(R.id.container, fragment)
-                        transaction.addToBackStack(null)
-                        transaction.commit()
-
+                        openSettings();
                         true
                     } else -> {
                     false
@@ -106,6 +98,13 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun openSettings() {
+        val manager = supportFragmentManager
+        val transaction = manager.beginTransaction()
+        val fragment = SettingsFragment()
+        transaction.replace(R.id.frame, fragment).commit()
     }
 
     override fun onStart() {
@@ -119,6 +118,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onPause() {
+        if (loadSettings()) pause()
         super.onPause()
         Log.d(mainTag, "onPause()")
     }
@@ -139,16 +139,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun timeTxt(): String {
-        val minute = DecimalFormat("00").format(time / 100 / 60)
-        val second = DecimalFormat("00").format(time / 100)
-        val millisecond = DecimalFormat("00").format(time % 100)
+        val millisecond = DecimalFormat("00").format(time / 10 % 100)
+        val second = DecimalFormat("00").format(time / 1000 % 60)
+        val minute = DecimalFormat("00").format(time / 1000 / 60)
         return "$minute:$second.$millisecond"
     }
 
     private fun sectionTimeTxt(): String {
-        val minute = DecimalFormat("00").format(sectionTime / 100 / 60)
-        val second = DecimalFormat("00").format(sectionTime / 100)
-        val millisecond = DecimalFormat("00").format(sectionTime % 100)
+        val millisecond = DecimalFormat("00").format(sectionTime / 10 % 100)
+        val second = DecimalFormat("00").format(sectionTime / 1000 % 60)
+        val minute = DecimalFormat("00").format(sectionTime / 1000 / 60)
         return "$minute:$second.$millisecond"
     }
 
@@ -160,43 +160,56 @@ class MainActivity : AppCompatActivity() {
         return "   ${recordIndexText()}                  ${sectionTimeTxt()}               ${timeTxt()}"
     }
 
+    private fun loadSettings(): Boolean {
+        val sp = PreferenceManager.getDefaultSharedPreferences(this)
+        return sp.getBoolean("background", false)
+    }
+
     @SuppressLint("SetTextI18n")
     private fun start() {
+        Log.d(mainTag, "StopWatch start")
         recordAndResetBtn.text = "구간 기록"
         startAndStopBtn.text = "중지"
         startAndStopBtn.setBackgroundResource(R.drawable.round_button_stop)
         recordAndResetBtn.isEnabled = true
         timerTask =
-            kotlin.concurrent.timer(period = 10) { //반복주기는 period 프로퍼티로 설정, 단위는 1000분의 1초 (period = 1000, 1초)
-                time++ // 0.01초마다 time 을 1씩 증가 (period=10)
-                runOnUiThread { // UI 조작을 위한 메서드
-                    timerText.text = timeTxt()
-                }
+            kotlin.concurrent.timer(period = 10) {
+                if (startTime == 0) startTime = SystemClock.uptimeMillis().toInt()
+                //반복주기는 period 프로퍼티로 설정, 단위는 1000분의 1초 (period = 1000, 1초)
+                time = SystemClock.uptimeMillis().toInt() - startTime + pauseTime
+                runOnUiThread { timerText.text = timeTxt() }
             }
     }
 
     private fun pause() {
+        Log.d(mainTag, "StopWatch pause")
+        pauseTime = time
+        startTime = SystemClock.uptimeMillis().toInt()
         recordAndResetBtn.text = "초기화"
         startAndStopBtn.text = "계속"
-        isRecorded = true
         startAndStopBtn.setBackgroundResource(R.drawable.round_button_start)
         timerTask?.cancel()
     }
 
     private fun reset() {
+        Log.d(mainTag, "StopWatch reset")
         recordListText.visibility = View.INVISIBLE
         recordListBar.visibility = View.INVISIBLE
 
         recordAndResetBtn.text = "구간 기록"
+        startAndStopBtn.text = "시작"
         recordAndResetBtn.isEnabled = false
         timerText.text = "00:00.00"
-        recordIndex = 0
-        sectionTime = 0
         time = 0
+        pauseTime = 0
+        sectionTime = 0
+        startTime = SystemClock.uptimeMillis().toInt()
+        recordIndex = 0
         recordList.removeAllViews()
     }
 
     private fun record() {
+        Log.d(mainTag, "StopWatch record")
         recordListText.visibility = View.VISIBLE
         recordListBar.visibility = View.VISIBLE
 
