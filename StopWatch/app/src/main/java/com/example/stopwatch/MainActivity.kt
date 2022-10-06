@@ -5,12 +5,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.PopupMenu
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import java.text.DecimalFormat
@@ -104,7 +99,8 @@ class MainActivity : AppCompatActivity() {
         val manager = supportFragmentManager
         val transaction = manager.beginTransaction()
         val fragment = SettingsFragment()
-        transaction.replace(R.id.frame, fragment).commit()
+        // https://todaycode.tistory.com/131 참조
+        transaction.replace(R.id.frame, fragment).addToBackStack(null).commit()
     }
 
     override fun onStart() {
