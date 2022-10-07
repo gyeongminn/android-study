@@ -1,7 +1,6 @@
 package com.example.stopwatch
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
@@ -83,22 +82,21 @@ class MainActivity : AppCompatActivity() {
             menuInflater.inflate(R.menu.popup, popupMenu.menu)
             popupMenu.show()
             popupMenu.setOnMenuItemClickListener {
-                when(it.itemId) {
+                when (it.itemId) {
                     R.id.settings -> {
                         Log.d(mainTag, "open SettingActivity")
                         openSettings();
                         true
-                    } else -> {
-                    false
-                }
+                    }
+                    else -> {
+                        false
+                    }
                 }
             }
         }
     }
 
     private fun openSettings() {
-//        startActivity(Intent(this, BlankActivity::class.java))
-
         val manager = supportFragmentManager
         val transaction = manager.beginTransaction()
         val fragment = SettingsFragment()
@@ -156,7 +154,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun recordTxt(): String {
-        return "   ${recordIndexText()}                  ${sectionTimeTxt()}               ${timeTxt()}"
+        return "   ${recordIndexText()}                 ${sectionTimeTxt()}               ${timeTxt()}"
     }
 
     private fun loadSettings(): Boolean {
@@ -209,23 +207,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun record() {
         Log.d(mainTag, "StopWatch record")
+        sectionTime = time - sectionTime
+
         recordListText.visibility = View.VISIBLE
         recordListBar.visibility = View.VISIBLE
-
-        sectionTime = time - sectionTime
         recordIndex++
 
-        val textViewNm = TextView(applicationContext)
-        textViewNm.text = recordTxt()
-        textViewNm.textSize = 16f
-        textViewNm.id = 0
         val param: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
         param.marginStart = 10
         param.topMargin = 50
+
+        val textViewNm = TextView(applicationContext)
+        textViewNm.textSize = 16f
+        textViewNm.id = 0
         textViewNm.layoutParams = param
+
+        textViewNm.text = recordTxt()
         recordList.addView(textViewNm)
+        sectionTime = time
     }
 }
