@@ -1,6 +1,7 @@
 package com.example.stopwatch
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
@@ -96,10 +97,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun openSettings() {
+//        startActivity(Intent(this, BlankActivity::class.java))
+
         val manager = supportFragmentManager
         val transaction = manager.beginTransaction()
         val fragment = SettingsFragment()
-        // https://todaycode.tistory.com/131 참조
+//        https://todaycode.tistory.com/131 참조
         transaction.replace(R.id.frame, fragment).addToBackStack(null).commit()
     }
 

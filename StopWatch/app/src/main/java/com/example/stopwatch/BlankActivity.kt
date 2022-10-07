@@ -8,9 +8,9 @@ class BlankActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_blank)
 
-        val manager = supportFragmentManager
-        val transaction = manager.beginTransaction()
-        val fragment = SettingsFragment()
-        transaction.replace(R.id.frame, fragment).addToBackStack(null).commit()
+        //val manager = supportFragmentManager
+        //val transaction = manager.beginTransaction()
+        //val fragment = SettingsFragment()
+        //transaction.replace(R.id.frame, fragment).addToBackStack(null).commit()
     }
 }
