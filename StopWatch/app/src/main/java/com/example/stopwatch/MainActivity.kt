@@ -214,8 +214,7 @@ class MainActivity : AppCompatActivity() {
         recordIndex++
 
         val param: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.WRAP_CONTENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
+            LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
         )
         param.marginStart = 10
         param.topMargin = 50
