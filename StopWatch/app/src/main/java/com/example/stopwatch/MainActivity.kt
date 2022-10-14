@@ -34,12 +34,11 @@ class MainActivity : AppCompatActivity() {
 
     private val mainTag = "LifeCycle[main]"
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d(mainTag, "onCreate()")
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        Log.d(mainTag, "onCreate()")
 
         startAndStopBtn = findViewById(R.id.startAndStopBtn)
         recordAndResetBtn = findViewById(R.id.recordAndResetBtn)
@@ -53,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         recordListText.visibility = View.INVISIBLE
         recordListBar = findViewById(R.id.recordListBar)
         recordListBar.visibility = View.INVISIBLE
-
 
         // 시작, 중지 이벤트
         startAndStopBtn.setOnClickListener {
