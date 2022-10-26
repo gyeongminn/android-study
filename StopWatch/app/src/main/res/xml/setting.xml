@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <SwitchPreference
 
         android:key="background"
         android:title="백그라운드에서 멈춤"
         android:summary="백그라운드 상태가 되면 스탑워치가 일시중지됩니다." />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="easterEggSwitch"
+        android:title="이스터에그"
+        app:summary="이스터에그 모드를 켭니다." />
 </PreferenceScreen>

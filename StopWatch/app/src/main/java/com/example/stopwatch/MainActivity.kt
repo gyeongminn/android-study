@@ -8,14 +8,26 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
+import nl.dionsegijn.konfetti.xml.KonfettiView
 import java.text.DecimalFormat
 import java.util.*
+
+import nl.dionsegijn.konfetti.core.Angle
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.Position
+import nl.dionsegijn.konfetti.core.Rotation
+import nl.dionsegijn.konfetti.core.emitter.Emitter
+import nl.dionsegijn.konfetti.core.models.Size
+import nl.dionsegijn.konfetti.core.Spread
+import java.util.concurrent.TimeUnit
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var startAndStopBtn: Button // 시작, 멈춤 버튼
     private lateinit var recordAndResetBtn: Button // 기록, 초기화 버튼
     private lateinit var popupMenu: ImageButton // 팝업 메뉴 버튼
+
     private var timerTask: Timer? = null
 
     private var isRunning: Boolean = false // 현재 상태
@@ -32,6 +44,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recordListText: LinearLayout
     private lateinit var recordListBar: ImageView
 
+    private lateinit var viewKonfetti: KonfettiView
+    private lateinit var easterEgg1: Button
+    private lateinit var easterEgg2: Button
+
     private val mainTag = "LifeCycle[main]"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +61,7 @@ class MainActivity : AppCompatActivity() {
         timerText = findViewById(R.id.timerText)
         recordList = findViewById(R.id.recordList)
 
+        viewKonfetti = findViewById(R.id.konfettiView)
         popupMenu = findViewById(R.id.popupMenu)
 
         // 기록 없을땐 숨기기
@@ -52,6 +69,21 @@ class MainActivity : AppCompatActivity() {
         recordListText.visibility = View.INVISIBLE
         recordListBar = findViewById(R.id.recordListBar)
         recordListBar.visibility = View.INVISIBLE
+
+        easterEgg1 = findViewById(R.id.easterEgg1)
+        easterEgg2 = findViewById(R.id.easterEgg2)
+
+        easterEgg1.setOnClickListener {
+            if (loadEasterEggMode()) {
+                viewKonfetti.start(festive())
+            }
+        }
+        
+        easterEgg2.setOnClickListener {
+            if (loadEasterEggMode()) {
+                viewKonfetti.start(parade())
+            }
+        }
 
         // 시작, 중지 이벤트
         startAndStopBtn.setOnClickListener {
@@ -160,6 +192,11 @@ class MainActivity : AppCompatActivity() {
         return sp.getBoolean("background", false)
     }
 
+    private fun loadEasterEggMode(): Boolean {
+        val sp = PreferenceManager.getDefaultSharedPreferences(this)
+        return sp.getBoolean("easterEggSwitch", false)
+    }
+
     @SuppressLint("SetTextI18n")
     private fun start() {
         Log.d(mainTag, "StopWatch start")
@@ -225,5 +262,64 @@ class MainActivity : AppCompatActivity() {
         textViewNm.text = recordTxt()
         recordList.addView(textViewNm)
         sectionTime = time
+    }
+
+    fun festive(): List<Party> {
+        val party = Party(
+            speed = 30f,
+            maxSpeed = 50f,
+            damping = 0.9f,
+            angle = Angle.TOP,
+            spread = 45,
+            size = listOf(Size.SMALL, Size.LARGE),
+            timeToLive = 3000L,
+            rotation = Rotation(),
+            colors = listOf(0xfce18a, 0xff726d, 0xf4306d, 0xb48def),
+            emitter = Emitter(duration = 100, TimeUnit.MILLISECONDS).max(30),
+            position = Position.Relative(0.5, 1.0)
+        )
+
+        return listOf(
+            party,
+            party.copy(
+                speed = 55f,
+                maxSpeed = 65f,
+                spread = 10,
+                emitter = Emitter(duration = 100, TimeUnit.MILLISECONDS).max(10),
+            ),
+            party.copy(
+                speed = 50f,
+                maxSpeed = 60f,
+                spread = 120,
+                emitter = Emitter(duration = 100, TimeUnit.MILLISECONDS).max(40),
+            ),
+            party.copy(
+                speed = 65f,
+                maxSpeed = 80f,
+                spread = 10,
+                emitter = Emitter(duration = 100, TimeUnit.MILLISECONDS).max(10),
+            )
+        )
+    }
+
+    private fun parade(): List<Party> {
+        val party = Party(
+            speed = 10f,
+            maxSpeed = 30f,
+            damping = 0.9f,
+            angle = Angle.RIGHT - 45,
+            spread = Spread.SMALL,
+            colors = listOf(0xfce18a, 0xff726d, 0xf4306d, 0xb48def),
+            emitter = Emitter(duration = 5, TimeUnit.SECONDS).perSecond(30),
+            position = Position.Relative(0.0, 0.5)
+        )
+
+        return listOf(
+            party,
+            party.copy(
+                angle = party.angle - 90, // flip angle from right to left
+                position = Position.Relative(1.0, 0.5)
+            ),
+        )
     }
 }
