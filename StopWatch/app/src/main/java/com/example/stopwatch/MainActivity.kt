@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.preference.PreferenceManager
 import nl.dionsegijn.konfetti.xml.KonfettiView
 import java.text.DecimalFormat
+import java.util.concurrent.TimeUnit
 import java.util.*
 
 import nl.dionsegijn.konfetti.core.Angle
@@ -19,7 +20,6 @@ import nl.dionsegijn.konfetti.core.Rotation
 import nl.dionsegijn.konfetti.core.emitter.Emitter
 import nl.dionsegijn.konfetti.core.models.Size
 import nl.dionsegijn.konfetti.core.Spread
-import java.util.concurrent.TimeUnit
 
 
 class MainActivity : AppCompatActivity() {
@@ -264,7 +264,7 @@ class MainActivity : AppCompatActivity() {
         sectionTime = time
     }
 
-    fun festive(): List<Party> {
+    private fun festive(): List<Party> {
         val party = Party(
             speed = 30f,
             maxSpeed = 50f,
