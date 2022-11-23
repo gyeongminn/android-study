@@ -27,7 +27,7 @@ class GameView(context: Context) : View(context) {
     private val snakeBody: Bitmap
 
     init {
-        (context.getSystemService(AppCompatActivity.WINDOW_SERVICE) as WindowManager).defaultDisplay.getMetrics(displayMetrics)
+        (context.getSystemService(  AppCompatActivity.WINDOW_SERVICE) as WindowManager).defaultDisplay.getMetrics(displayMetrics)
         screenHeight = displayMetrics.heightPixels
         screenWidth= displayMetrics.widthPixels
         snake = Snake(600F, 200F, screenWidth/16, screenHeight/32, Direction.UP, 1)
@@ -39,6 +39,8 @@ class GameView(context: Context) : View(context) {
         )
         SnakeThread(snake).start()
 
+
+
         val mHandler: Handler = @SuppressLint("HandlerLeak")
         object : Handler() {
             override fun handleMessage(msg: Message) {
@@ -48,16 +50,12 @@ class GameView(context: Context) : View(context) {
         }
 
         mHandler.sendEmptyMessageDelayed(0, 10)
-
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
         canvas.drawRect(0F, 0F, screenWidth.toFloat(), screenGameTop, paint)
-
         canvas.drawBitmap(snakeBody, snake.x, snake.y, null)
-
     }
 
     inner class SnakeThread(private val snake: Snake): Thread() {
@@ -68,11 +66,13 @@ class GameView(context: Context) : View(context) {
             while(true) {
                 snake.x += 10
                 sleep(10)
+                when (snake.direction) {
+                    Direction.UP -> snake.y--
+                    Direction.DOWN -> snake.y++
+                    Direction.LEFT -> snake.x--
+                    Direction.RIGHT -> snake.x++
+                }
 
-//                Log.d("Check", "run: ${snake.x} ${snake.y}")
-//                snake.x += snake.speedX // 가로로 이동
-//                snake.y += snake.speedY // 세로로 이동
-//
 //                if (snake.x < snake.width / 2) {                           // 왼쪽 벽
 //                    snake.x = snake.width / 2.toFloat()
 //                    snake.speedX = -snake.speedX
@@ -86,8 +86,7 @@ class GameView(context: Context) : View(context) {
 //                    snake.y = screenHeight.toFloat() - 100f - snake.height/2
 //                    snake.speedY = -snake.speedY
 //                }
-//                sleep(10)
-
+                sleep(10)
             }
         }
     }

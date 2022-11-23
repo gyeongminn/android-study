@@ -3,6 +3,7 @@ package com.example.snakegame
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.snakegame.databinding.ActivityMainBinding
 import com.example.snakegame.game.GameActivity
 
@@ -15,8 +16,8 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        binding.startBtn.setOnClickListener {
-            startActivity(Intent(this@MainActivity, GameActivity::class.java))
-        }
+        // binding.startBtn.setOnClickListener {
+        startActivity(Intent(this@MainActivity, GameActivity::class.java))
+        //}
     }
 }
