@@ -1,10 +1,9 @@
 package com.example.beggerlife
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.WindowManager
+import androidx.appcompat.app.AppCompatActivity
 import com.example.beggerlife.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -23,11 +22,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         supportActionBar?.hide()
 
-//        coin = MyApplication.preferenceUtil.getString("coin", "").toInt()
-//        coinPerClick = MyApplication.preferenceUtil.getString("coinPerClick", "").toInt()
-//        coinPerSec = MyApplication.preferenceUtil.getString("coinPerSec", "").toInt()
+        coin = MyApplication.preferenceUtil.getString("coin", "0").toInt()
+        coinPerClick = MyApplication.preferenceUtil.getString("coinPerClick", "100").toInt()
+        coinPerSec = MyApplication.preferenceUtil.getString("coinPerSec", "1").toInt()
 
         binding.clickBtn.setOnClickListener {
+            Log.d("MAIN_TAG", "click")
             coin += coinPerClick
             binding.coin.text = "${coin}G"
         }
@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity() {
             coinPerClick = 100
             coinPerSec = 0
         }
-
 
         GameThread().start()
     }
@@ -53,14 +52,11 @@ class MainActivity : AppCompatActivity() {
     inner class GameThread : Thread() {
         override fun run() {
             super.run()
-
             while (true) {
                 coin += coinPerSec
-
                 runOnUiThread {
                     binding.coin.text = "${coin}G"
                 }
-
                 sleep(1000)
             }
         }
