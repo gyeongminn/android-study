@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Week6</string>
+    <string name="dog">개</string>
+    <string name="cat">고양이</string>
+    <string name="button">버튼</string>
+    <string name="input_your_name">이름을 입력하세요.</string>
+    <string name="android_programming">안드로이드 프로그래밍</string>
+</resources>
