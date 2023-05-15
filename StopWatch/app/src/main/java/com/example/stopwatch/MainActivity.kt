@@ -129,9 +129,9 @@ class MainActivity : AppCompatActivity() {
     private fun openSettings() {
         val manager = supportFragmentManager
         val transaction = manager.beginTransaction()
-        val fragment = SettingsFragment()
+//        val fragment = SettingsFragment()
 //        https://todaycode.tistory.com/131 참조
-        transaction.replace(R.id.frame, fragment).addToBackStack(null).commit()
+//        transaction.replace(R.id.frame, fragment).addToBackStack(null).commit()
     }
 
     override fun onStart() {
