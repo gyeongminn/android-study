@@ -1,0 +1,8 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="entries">
+        <item>small</item>
+        <item>medium</item>
+        <item>big</item>
+    </string-array>
+</resources>
